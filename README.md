@@ -21,6 +21,13 @@ assets/
   2.png, 6.png, 7.png  — haircut/work photos
   hero-loop.mp4         — background/showcase video
   craft-detail.mp4      — AI-generated cinematic clip (scissors + steam, gold light) in the "Every Detail, Considered" section — not footage of the real shop; swap for a real product shot whenever one's available
+book.html         — accounts + booking page (sign in, profile, card on file, appointment requests)
+book.js            — talks to Supabase (auth + database) and Stripe from the browser
+book.css           — booking page styles
+config.js          — PUBLIC keys for Supabase/Stripe (placeholders until you set accounts up — see below)
+supabase/
+  schema.sql                              — database tables + security rules; run once in Supabase
+  functions/create-setup-intent/index.ts  — the one bit of server code, for saving a card via Stripe
 ```
 
 No build tools, no npm install required to run — it's plain HTML/CSS/JS. `script.js` loads the `motion` animation library straight from a CDN (`esm.sh`) as an ES module.
@@ -49,6 +56,45 @@ No build tools, no npm install required to run — it's plain HTML/CSS/JS. `scri
 **Full opening hours** — only "closes 8pm" was available from the Maps listing. The Visit section shows a live "Open Now / Closed Now" indicator computed from that single data point (assumes opening by 8am). Replace with real weekly hours in `index.html` for accuracy.
 
 More photos can always be added: drop images into `assets/` and add a `<div class="gallery__item">` entry in the Gallery section of `index.html`.
+
+## Setting up accounts and logins
+
+`book.html` needs three free/cheap accounts before it works — GitHub Pages can only serve static files, so the database, login, and payment pieces live in separate services that the page talks to. Until you do this, the page just shows a "Booking isn't switched on yet" message — it won't break anything else on the site.
+
+**What this gets you:** customers sign in with Google or email, save their name/age/preferred cut, optionally save a card on file (no charge — Stripe just stores it for later), and submit booking requests that land in a database you can query. There's no live calendar/slot-conflict checking yet — each request is a "please confirm" that the shop follows up on by phone, same as a contact form with memory.
+
+### 1. Create a Supabase project (free)
+
+1. Go to [supabase.com](https://supabase.com) → sign up → **New Project**. Pick any name/region, save the database password somewhere safe.
+2. Once it's created: **SQL Editor → New query**, paste the entire contents of `supabase/schema.sql`, click **Run**. This creates the `profiles` and `bookings` tables with security rules that make sure a customer can only ever see their own data.
+3. **Project Settings → API** — copy the **Project URL** and the **anon/public key**. These go in `config.js` (`SUPABASE_URL`, `SUPABASE_ANON_KEY`). Also set `SUPABASE_FUNCTIONS_URL` to the Project URL with `/functions/v1` appended.
+
+### 2. Turn on Google sign-in
+
+1. In [Google Cloud Console](https://console.cloud.google.com): create a project → **APIs & Services → OAuth consent screen** (External, fill in app name/logo) → **Credentials → Create Credentials → OAuth client ID** (type: Web application).
+2. Authorized redirect URI: Supabase tells you the exact one to paste — it's in **Supabase Dashboard → Authentication → Providers → Google**. Copy the Client ID and Client Secret from Google into that same Supabase screen, toggle Google **on**.
+3. That's it — the "Continue with Google" button on `book.html` will work once this is done.
+
+### 3. Create a Stripe account (for the "card on file" feature)
+
+1. Sign up at [stripe.com](https://stripe.com). You can build and test everything in **Test mode** (top-right toggle) before ever submitting real business/bank details — only flip to Live mode when you're ready to take real cards.
+2. **Developers → API keys**: copy the **Publishable key** (`pk_test_...`) into `config.js` as `STRIPE_PUBLISHABLE_KEY`. Copy the **Secret key** (`sk_test_...`) — this one is *not* for `config.js`, it goes into Supabase in the next step.
+3. Install the [Supabase CLI](https://supabase.com/docs/guides/cli), then from this project folder:
+   ```bash
+   supabase login
+   supabase link --project-ref YOUR-PROJECT-REF
+   supabase secrets set STRIPE_SECRET_KEY=sk_test_...
+   supabase functions deploy create-setup-intent
+   ```
+   This deploys `supabase/functions/create-setup-intent` — the only piece of this whole system that runs on a server, because saving a card requires Stripe's secret key, which must never appear in the site's public JavaScript.
+
+### 4. Fill in `config.js` and you're live
+
+Once all four values in `config.js` are real (not the `YOUR-...` placeholders), commit and push — `book.html` switches itself on automatically, no code changes needed.
+
+### A note on the credit card question specifically
+
+Nothing in this setup ever stores a card number in your database or on GitHub. Stripe's own form (loaded via `js.stripe.com`) collects the card directly in the customer's browser and sends it straight to Stripe — your database only ever holds a Stripe customer ID, which is useless to anyone without your Stripe account login. That split is what keeps you out of PCI-DSS compliance territory; building your own card storage instead of using Stripe would be both far more work and a real legal/security liability.
 
 ## Run locally
 

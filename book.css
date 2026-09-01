@@ -1,0 +1,113 @@
+/* MS Barbers — booking page styles (uses design tokens from styles.css) */
+
+.booking { padding-top: var(--space-lg); }
+.booking__container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+.booking-card {
+  background: linear-gradient(160deg, var(--color-bg-card), var(--color-bg-elevated));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+}
+.booking-card + .booking-card { margin-top: 0; }
+.booking-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.btn--full { width: 100%; }
+.btn--lg.btn--outline .icon { width: 20px; height: 20px; }
+
+.booking-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-block: var(--space-md);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.booking-divider::before, .booking-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.booking-form { display: flex; flex-direction: column; gap: var(--space-sm); margin-top: var(--space-md); }
+.booking-form--grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm) var(--space-md); }
+.booking-form__wide { grid-column: 1 / -1; }
+.booking-form label { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; color: var(--color-text-muted); }
+.booking-form input, .booking-form select {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+.booking-form input:focus, .booking-form select:focus {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 1px;
+}
+.booking-form__actions { display: flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-xs); }
+
+.booking-error {
+  color: #f87171;
+  font-size: 0.85rem;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+}
+.booking-saved { color: var(--color-accent-light); font-size: 0.85rem; font-weight: 600; }
+.booking-note { margin-top: var(--space-sm); font-size: 0.8rem; color: var(--color-text-muted); }
+
+.booking-card-status { font-size: 0.85rem; color: var(--color-accent-light); margin-bottom: var(--space-sm); min-height: 1.2em; }
+.booking-card-element {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.85rem;
+  margin-bottom: var(--space-sm);
+}
+
+.bookings-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-sm); }
+.bookings-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+.bookings-list .booking-status {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+.bookings-list .booking-status--pending { color: var(--color-accent-light); border-color: rgba(200,136,15,0.4); }
+.bookings-list .booking-status--confirmed { color: #4ade80; border-color: rgba(74,222,128,0.4); }
+.bookings-list .booking-status--cancelled { color: var(--color-text-muted); text-decoration: line-through; }
+
+@media (max-width: 640px) {
+  .booking-form--grid { grid-template-columns: 1fr; }
+  .booking-card__head { flex-direction: column; }
+}

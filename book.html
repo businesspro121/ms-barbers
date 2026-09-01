@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Now — MS Barbers</title>
+<meta name="description" content="Sign in and request an appointment at MS Barbers, Bow, London.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://businesspro121.github.io/ms-barbers/book.html">
+<link rel="icon" href="assets/ms-barbers-sign.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="book.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="./" class="nav__brand">
+      <img src="assets/ms-barbers-sign.jpg" alt="MS Barbers logo" class="nav__logo">
+      <span>MS BARBERS</span>
+    </a>
+    <nav class="nav__links" id="navLinks">
+      <a href="./#about">About</a>
+      <a href="./#services">Services</a>
+      <a href="./#gallery">Gallery</a>
+      <a href="./#reviews">Reviews</a>
+      <a href="./#visit">Visit</a>
+      <a href="blog/">Blog</a>
+    </nav>
+    <div class="nav__actions">
+      <a href="tel:+447482936667" class="btn btn--ghost nav__call">07482 936667</a>
+      <a href="book.html" class="btn btn--gold" aria-current="page">Book Now</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <nav class="breadcrumb container" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="./">Home</a></li>
+      <li aria-current="page">Book Now</li>
+    </ol>
+  </nav>
+
+  <section class="section booking">
+    <div class="container booking__container">
+
+      <!-- Not configured yet: shown until config.js has real keys in it -->
+      <div id="notConfigured" class="booking-card" hidden>
+        <p class="eyebrow">Setup needed</p>
+        <h1 class="section-title">Booking isn't switched on yet</h1>
+        <p class="lead">This page needs a Supabase project and Stripe account connected before it'll work. See <code>README.md → "Setting up accounts and logins"</code> for the exact steps, then fill in <code>config.js</code>.</p>
+      </div>
+
+      <!-- Signed out -->
+      <div id="signedOutView" class="booking-card" hidden>
+        <p class="eyebrow">Your Account</p>
+        <h1 class="section-title">Sign In to Book</h1>
+        <p class="lead">Save your details once, then book in seconds next time.</p>
+
+        <button id="googleSignInBtn" class="btn btn--outline btn--lg btn--full">
+          <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
+
+        <div class="booking-divider"><span>or</span></div>
+
+        <form id="emailAuthForm" class="booking-form">
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" required autocomplete="email">
+          </label>
+          <label>
+            <span>Password</span>
+            <input type="password" name="password" required autocomplete="current-password" minlength="6">
+          </label>
+          <p id="authError" class="booking-error" hidden></p>
+          <div class="booking-form__actions">
+            <button type="submit" data-action="signin" class="btn btn--gold">Sign In</button>
+            <button type="submit" data-action="signup" class="btn btn--outline">Create Account</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Signed in -->
+      <div id="signedInView" hidden>
+        <div class="booking-card">
+          <div class="booking-card__head">
+            <div>
+              <p class="eyebrow">Welcome back</p>
+              <h1 class="section-title" id="welcomeName">Your Account</h1>
+            </div>
+            <button id="signOutBtn" class="btn btn--outline">Sign Out</button>
+          </div>
+
+          <form id="profileForm" class="booking-form booking-form--grid">
+            <label>
+              <span>Full name</span>
+              <input type="text" name="full_name" required>
+            </label>
+            <label>
+              <span>Age</span>
+              <input type="number" name="age" min="0" max="120">
+            </label>
+            <label class="booking-form__wide">
+              <span>Preferred cut</span>
+              <select name="preferred_cut_type">
+                <option value="Classic Haircut">Classic Haircut</option>
+                <option value="Beard Sculpting">Beard Sculpting</option>
+                <option value="Hot Towel Finish">Hot Towel Finish</option>
+                <option value="Kids & First Cuts">Kids &amp; First Cuts</option>
+              </select>
+            </label>
+            <div class="booking-form__wide booking-form__actions">
+              <button type="submit" class="btn btn--gold">Save Profile</button>
+              <span id="profileSaved" class="booking-saved" hidden>Saved ✓</span>
+            </div>
+          </form>
+        </div>
+
+        <div class="booking-card">
+          <p class="eyebrow">Payment Method</p>
+          <h2 class="section-title section-title--sm">Card on File</h2>
+          <p class="lead">Optional — save a card for convenience. Nothing is ever charged automatically; your card details go straight to Stripe and never touch this site or its database.</p>
+          <div id="cardOnFileStatus" class="booking-card-status"></div>
+          <div id="cardElement" class="booking-card-element"></div>
+          <p id="cardError" class="booking-error" hidden></p>
+          <button id="saveCardBtn" class="btn btn--outline">Save Card</button>
+        </div>
+
+        <div class="booking-card">
+          <p class="eyebrow">Request an Appointment</p>
+          <h2 class="section-title section-title--sm">New Booking</h2>
+          <form id="bookingForm" class="booking-form booking-form--grid">
+            <label>
+              <span>Cut type</span>
+              <select name="cut_type" required>
+                <option value="Classic Haircut">Classic Haircut</option>
+                <option value="Beard Sculpting">Beard Sculpting</option>
+                <option value="Hot Towel Finish">Hot Towel Finish</option>
+                <option value="Kids & First Cuts">Kids &amp; First Cuts</option>
+              </select>
+            </label>
+            <label>
+              <span>Preferred date &amp; time</span>
+              <input type="datetime-local" name="requested_at" required>
+            </label>
+            <label class="booking-form__wide">
+              <span>Notes (optional)</span>
+              <input type="text" name="notes" placeholder="e.g. first visit, nervous about the fade length">
+            </label>
+            <div class="booking-form__wide booking-form__actions">
+              <button type="submit" class="btn btn--gold">Request Booking</button>
+            </div>
+          </form>
+          <p class="booking-note">This sends a request — the shop confirms it by phone or text. It isn't an instant, guaranteed slot yet.</p>
+        </div>
+
+        <div class="booking-card">
+          <p class="eyebrow">Your Bookings</p>
+          <h2 class="section-title section-title--sm">Upcoming &amp; Past</h2>
+          <ul id="bookingsList" class="bookings-list"></ul>
+          <p id="bookingsEmpty" class="booking-note" hidden>No bookings yet.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <img src="assets/ms-barbers-sign.jpg" alt="MS Barbers logo" class="footer__logo">
+      <span>MS BARBERS</span>
+    </div>
+    <nav class="footer__links">
+      <a href="./#about">About</a>
+      <a href="./#services">Services</a>
+      <a href="./#gallery">Gallery</a>
+      <a href="./#reviews">Reviews</a>
+      <a href="./#visit">Visit</a>
+      <a href="blog/">Blog</a>
+    </nav>
+    <p class="footer__copy">&copy; <span id="year"></span> MS Barbers, Bow, London. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="config.js"></script>
+<script src="book.js"></script>
+</body>
+</html>

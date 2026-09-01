@@ -240,6 +240,9 @@ a { color: inherit; text-decoration: none; }
   transition: right 250ms var(--ease-out);
 }
 .nav__links a:hover::after { right: 0; }
+/* Duplicate of the "Book Now" button in .nav__actions, for when that whole
+   group is hidden below the 640px breakpoint — see the responsive section. */
+.nav__links-book { display: none; }
 .nav__actions { display: flex; align-items: center; gap: var(--space-sm); }
 .nav__call { display: none; }
 .nav__burger {
@@ -679,6 +682,17 @@ a { color: inherit; text-decoration: none; }
   .blog-grid { grid-template-columns: 1fr; }
   .nav__call { display: none !important; }
   .nav__actions { display: none; }
+  .nav__links-book {
+    display: block;
+    margin-top: var(--space-sm);
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: var(--color-on-accent) !important;
+    font-weight: 600;
+    text-align: center;
+  }
+  .nav__links-book::after { display: none; }
   .nav__brand span { font-size: 1rem; white-space: nowrap; }
   .hero__cta { flex-direction: column; align-items: stretch; }
   .stat-row { gap: var(--space-md); }
