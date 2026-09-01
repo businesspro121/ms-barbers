@@ -201,3 +201,67 @@ if (!prefersReducedMotion) {
     btn.addEventListener("pointerleave", onLeave);
   });
 }
+
+/* ---------------- Gallery lightbox ---------------- */
+(function initLightbox() {
+  const triggers = [...document.querySelectorAll("[data-lightbox]")];
+  const lightbox = document.getElementById("lightbox");
+  if (!triggers.length || !lightbox) return;
+
+  const imgEl = document.getElementById("lightboxImg");
+  const counterEl = document.getElementById("lightboxCounter");
+  const closeBtn = document.getElementById("lightboxClose");
+  const prevBtn = document.getElementById("lightboxPrev");
+  const nextBtn = document.getElementById("lightboxNext");
+
+  const items = triggers.map((t) => ({ src: t.dataset.src, alt: t.dataset.alt }));
+  let currentIndex = 0;
+  let lastFocused = null;
+
+  function show(index, { animateIn = true } = {}) {
+    currentIndex = (index + items.length) % items.length;
+    const item = items[currentIndex];
+    imgEl.src = item.src;
+    imgEl.alt = item.alt;
+    counterEl.textContent = `${currentIndex + 1} / ${items.length}`;
+    if (animateIn && !prefersReducedMotion) {
+      animate(imgEl, { opacity: [0, 1], scale: [0.96, 1] }, { duration: 0.25, easing: [0.16, 1, 0.3, 1] });
+    }
+  }
+
+  function open(index, trigger) {
+    lastFocused = trigger || document.activeElement;
+    lightbox.hidden = false;
+    document.body.style.overflow = "hidden";
+    show(index, { animateIn: false });
+    if (!prefersReducedMotion) {
+      animate(lightbox, { opacity: [0, 1] }, { duration: 0.2 });
+      animate(imgEl, { opacity: [0, 1], scale: [0.94, 1] }, { duration: 0.3, easing: [0.16, 1, 0.3, 1] });
+    }
+    closeBtn.focus();
+    document.addEventListener("keydown", onKeydown);
+  }
+
+  function close() {
+    lightbox.hidden = true;
+    document.body.style.overflow = "";
+    document.removeEventListener("keydown", onKeydown);
+    lastFocused?.focus();
+  }
+
+  function onKeydown(e) {
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowRight") show(currentIndex + 1);
+    if (e.key === "ArrowLeft") show(currentIndex - 1);
+  }
+
+  triggers.forEach((trigger, index) => {
+    trigger.addEventListener("click", () => open(index, trigger));
+  });
+  closeBtn.addEventListener("click", close);
+  prevBtn.addEventListener("click", () => show(currentIndex - 1));
+  nextBtn.addEventListener("click", () => show(currentIndex + 1));
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) close();
+  });
+})();

@@ -11,8 +11,8 @@
 // account — see README.md "Setting up accounts and logins" for exact steps.
 
 window.MS_BARBERS_CONFIG = {
-  SUPABASE_URL: "https://YOUR-PROJECT.supabase.co",
-  SUPABASE_ANON_KEY: "YOUR_SUPABASE_ANON_KEY",
+  SUPABASE_URL: "https://bedpheardbypvhoczbai.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_RFu8CYK5nmC8jwrPKGkgfw_yRY5zzqG",
   STRIPE_PUBLISHABLE_KEY: "pk_test_YOUR_STRIPE_PUBLISHABLE_KEY",
-  SUPABASE_FUNCTIONS_URL: "https://YOUR-PROJECT.supabase.co/functions/v1",
+  SUPABASE_FUNCTIONS_URL: "https://bedpheardbypvhoczbai.supabase.co/functions/v1",
 };

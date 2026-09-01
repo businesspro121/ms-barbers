@@ -38,7 +38,9 @@ No build tools, no npm install required to run — it's plain HTML/CSS/JS. `scri
 - **Cursor-tilt cards** — service cards, review cards, and the About section's sign photo (`.card-3d`, `.tilt-card`) rotate toward the pointer via `perspective` + `rotateX/rotateY`.
 - **Magnetic buttons** — every `.btn` nudges slightly toward the cursor on hover and eases back on leave.
 - **Scroll-linked hero** — the hero video and headline scale/fade/tilt as you scroll past them, tied to scroll progress via Motion's `scroll()`.
-- Everything here respects `prefers-reduced-motion`: the cursor-glow and parallax layer are removed entirely, and reveal/tilt animations collapse to their final state instead of animating.
+- **Gallery lightbox** — click any Gallery photo to view it full-size with prev/next arrows, arrow-key navigation, and Escape/click-outside to close. Add a new photo to the lightbox by wrapping it in a `<button class="gallery__zoom" data-lightbox data-src="..." data-alt="...">` like the existing ones in `index.html`.
+- **Page transitions** — navigating between pages (home → blog → book) crossfades natively via the CSS View Transitions API (`@view-transition` in `styles.css`). Chrome/Edge animate it; Safari/Firefox without support just do a normal instant navigation — no fallback code needed either way.
+- Everything here respects `prefers-reduced-motion`: the cursor-glow and parallax layer are removed entirely, page transitions and reveal/tilt animations collapse to their final state instead of animating.
 
 ## SEO / AI-visibility setup
 
