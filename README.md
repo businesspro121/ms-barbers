@@ -6,8 +6,15 @@ A single-page, no-build-step website for MS Barbers (458 Roman Rd, Bow, London E
 
 ```
 index.html      — all page content/sections
-styles.css      — design tokens + layout + responsive rules
+styles.css      — design tokens + layout + responsive rules + blog/article styles
 script.js       — nav, scroll-linked 3D parallax, reveal animations, tilt cards
+robots.txt      — explicitly allows search + AI crawlers (GPTBot, ClaudeBot, Google-Extended, PerplexityBot, ...)
+sitemap.xml     — lists every page for search engines
+blog/
+  index.html                              — blog listing
+  how-often-should-you-get-a-haircut.html
+  skin-fade-vs-taper-fade.html
+  first-time-guide-ms-barbers-bow.html
 assets/
   ms-barbers-sign.jpg  — logo/nav sign crop
   3.png, 4.png, 5.png  — shop photos (storefront, interior, hanging sign)
@@ -16,6 +23,17 @@ assets/
 ```
 
 No build tools, no npm install required to run — it's plain HTML/CSS/JS. `script.js` loads the `motion` animation library straight from a CDN (`esm.sh`) as an ES module.
+
+## SEO / AI-visibility setup
+
+- Every page has a unique `<title>`, meta description, canonical URL, and Open Graph tags.
+- `index.html` carries `HairSalon` structured data (schema.org JSON-LD) with the real address, phone, rating (5.0/35) and Instagram — deliberately **no** `openingHoursSpecification`, since only "closes 8pm" is known; don't add fake hours to it.
+- Each blog post carries `BlogPosting` + `FAQPage` JSON-LD, which is what lets Google, and AI answer engines like ChatGPT/Claude/Gemini/Perplexity, pull direct Q&A snippets out of the page.
+- `robots.txt` explicitly allows the major AI crawlers (GPTBot, ClaudeBot, Google-Extended, PerplexityBot, etc.) rather than relying on the wildcard alone.
+- All content is static HTML — nothing is hidden behind JS rendering, so any crawler that doesn't execute JavaScript still sees the full text.
+- **After publishing**, submit `sitemap.xml` in [Google Search Console](https://search.google.com/search-console) to speed up indexing.
+
+**Adding a new blog post:** copy an existing post in `blog/`, update its content, `<title>`, meta description, and the two `<script type="application/ld+json">` blocks (`BlogPosting` + `FAQPage`), then add it to `blog/index.html`'s grid and to `sitemap.xml`.
 
 ## Before you publish — one thing left to check
 
