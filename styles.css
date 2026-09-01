@@ -357,6 +357,23 @@ a { color: inherit; text-decoration: none; }
 .reveal { opacity: 0; }
 .reveal.is-visible { opacity: 1; }
 
+/* ---------- Craft detail (cinematic clip) ---------- */
+.craft-detail__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-lg);
+}
+.craft-detail__copy .lead { max-width: 50ch; margin-inline: auto; margin-top: var(--space-sm); }
+.craft-detail__copy em { font-style: italic; color: var(--color-accent-light); }
+.craft-detail__frame {
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16 / 9;
+}
+.craft-detail__frame video { width: 100%; height: 100%; object-fit: cover; }
+
 /* ---------- About ---------- */
 .about__grid {
   display: grid;

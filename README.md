@@ -20,6 +20,7 @@ assets/
   3.png, 4.png, 5.png  — shop photos (storefront, interior, hanging sign)
   2.png, 6.png, 7.png  — haircut/work photos
   hero-loop.mp4         — background/showcase video
+  craft-detail.mp4      — AI-generated cinematic clip (scissors + steam, gold light) in the "Every Detail, Considered" section — not footage of the real shop; swap for a real product shot whenever one's available
 ```
 
 No build tools, no npm install required to run — it's plain HTML/CSS/JS. `script.js` loads the `motion` animation library straight from a CDN (`esm.sh`) as an ES module.
