@@ -4,6 +4,14 @@ import { animate, scroll, stagger } from "https://esm.sh/motion@11.15.0";
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/* ---------------- Scroll progress bar ---------------- */
+const scrollProgressBar = document.getElementById("scrollProgressBar");
+if (scrollProgressBar) {
+  scroll((progress) => {
+    scrollProgressBar.style.width = `${progress * 100}%`;
+  });
+}
+
 /* ---------------- Nav ---------------- */
 const nav = document.getElementById("nav");
 const navBurger = document.getElementById("navBurger");
@@ -120,6 +128,45 @@ if (!prefersReducedMotion) {
       { target: hero, offset: ["start start", "70% start"] }
     );
   }
+
+  /* ---------------- Scroll parallax on images ----------------
+     Each image drifts vertically as it crosses the viewport — the classic
+     "things move at a different speed while I scroll" effect. Applied to
+     .gallery__zoom/.gallery__video and .about__visual specifically because
+     those are NOT the same elements the reveal-in animation or the
+     pointer-tilt animation already own (.gallery__item for reveal,
+     .tilt-card for pointer-tilt) — same rule as above: never let two Motion
+     animations fight over the same element's transform. */
+  document.querySelectorAll(".gallery__zoom, .gallery__video, .about__visual").forEach((el) => {
+    scroll(animate(el, { y: [40, -40] }, { ease: "linear" }), {
+      target: el,
+      offset: ["start end", "end start"],
+    });
+  });
+
+  /* ---------------- Animated count-up numbers ---------------- */
+  document.querySelectorAll("[data-count-to]").forEach((el) => {
+    const target = Number(el.dataset.countTo);
+    const decimals = Number(el.dataset.countDecimals || 0);
+    const suffix = el.dataset.countSuffix || "";
+    const countIo = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          animate(0, target, {
+            duration: 1.4,
+            easing: [0.16, 1, 0.3, 1],
+            onUpdate: (value) => {
+              el.textContent = value.toFixed(decimals) + suffix;
+            },
+          });
+          countIo.unobserve(el);
+        });
+      },
+      { threshold: 0.6 }
+    );
+    countIo.observe(el);
+  });
 
   /* ---------------- Scroll-triggered reveals (3D tilt-in) ---------------- */
   const revealEls = document.querySelectorAll(".reveal");
