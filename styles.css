@@ -369,10 +369,13 @@ a { color: inherit; text-decoration: none; }
 .craft-detail__copy em { font-style: italic; color: var(--color-accent-light); }
 .craft-detail__frame {
   width: 100%;
-  max-width: 900px;
-  aspect-ratio: 16 / 9;
+  max-width: 640px;
+  aspect-ratio: 1 / 1;
 }
-.craft-detail__frame video { width: 100%; height: 100%; object-fit: cover; }
+/* Source clip's actual subject only occupies its left ~58% (the right side
+   renders as genuine near-black, confirmed by sampling frame brightness) —
+   object-position crops to that region instead of showing the dead space. */
+.craft-detail__frame video { width: 100%; height: 100%; object-fit: cover; object-position: 12% 50%; }
 
 /* ---------- About ---------- */
 .about__grid {
