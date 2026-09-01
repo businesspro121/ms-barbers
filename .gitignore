@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Original source assets (copied into assets/ for the site)
+/1.jpg
+/videoplayback.mp4
