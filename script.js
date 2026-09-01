@@ -41,18 +41,14 @@ if (hoursEl) {
   hoursEl.textContent = isLikelyOpen ? "Open Now" : "Closed Now";
 }
 
-/* ---------------- Gallery video ---------------- */
+/* ---------------- Gallery video (autoplay, muted, looping) ---------------- */
 const galleryVideo = document.querySelector(".gallery__video");
-const galleryPlay = document.getElementById("galleryPlay");
 if (galleryVideo) {
   galleryVideo.src = "assets/hero-loop.mp4";
+  const tryPlay = () => galleryVideo.play().catch(() => {});
+  galleryVideo.addEventListener("canplay", tryPlay, { once: true });
+  galleryVideo.load();
 }
-galleryPlay?.addEventListener("click", () => {
-  if (!galleryVideo) return;
-  galleryVideo.play();
-  galleryVideo.loop = true;
-  galleryPlay.classList.add("is-playing");
-});
 
 /* ---------------- Reduced motion: skip fancy stuff, show final state ---------------- */
 if (prefersReducedMotion) {

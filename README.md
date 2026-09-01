@@ -9,17 +9,19 @@ index.html      — all page content/sections
 styles.css      — design tokens + layout + responsive rules
 script.js       — nav, scroll-linked 3D parallax, reveal animations, tilt cards
 assets/
-  ms-barbers-sign.jpg  — shop sign photo
+  ms-barbers-sign.jpg  — logo/nav sign crop
+  3.png, 4.png, 5.png  — shop photos (storefront, interior, hanging sign)
+  2.png, 6.png, 7.png  — haircut/work photos
   hero-loop.mp4         — background/showcase video
 ```
 
 No build tools, no npm install required to run — it's plain HTML/CSS/JS. `script.js` loads the `motion` animation library straight from a CDN (`esm.sh`) as an ES module.
 
-## Before you publish — things to check/edit
+## Before you publish — one thing left to check
 
-1. **Instagram link** — the Google Maps data didn't include your actual @handle, so `index.html` (Visit section) has a placeholder note. Search for `add your @handle link here` and replace it with a real `<a href="https://instagram.com/your_handle">`.
-2. **Full opening hours** — only "closes 8pm" was available from your Maps listing. The footer/visit section shows a live "Open Now / Closed Now" indicator computed from that single data point (assumes opening by 8am). Replace with your real weekly hours for accuracy.
-3. **More photos** — the Gallery section currently only has your shop sign photo + the video, since that's all that was in this folder. Drop more images into `assets/` and add `<div class="gallery__item">` entries to grow it into a fuller gallery.
+**Full opening hours** — only "closes 8pm" was available from the Maps listing. The Visit section shows a live "Open Now / Closed Now" indicator computed from that single data point (assumes opening by 8am). Replace with real weekly hours in `index.html` for accuracy.
+
+More photos can always be added: drop images into `assets/` and add a `<div class="gallery__item">` entry in the Gallery section of `index.html`.
 
 ## Run locally
 
