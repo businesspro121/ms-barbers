@@ -24,13 +24,13 @@ assets/
 
 No build tools, no npm install required to run — it's plain HTML/CSS/JS. `script.js` loads the `motion` animation library straight from a CDN (`esm.sh`) as an ES module.
 
-## 3D & motion
+## Motion & interactivity
 
-- **A real WebGL 3D object** — the "Craft, In Motion" section (`#craft`) renders an actual Three.js barber pole (gold/black procedural stripe texture, real lighting, no image assets), loaded lazily from `esm.sh` so a CDN hiccup there can't break the rest of the page. It idles with a slow spin and tilts to meet the cursor (or a finger drag on touch); the render loop pauses automatically while scrolled off-screen.
-- **Site-wide cursor-reactive depth** — one `pointermove` listener in `script.js` drives two things everywhere on the page: a soft gold spotlight that follows the cursor (`.cursor-glow`, `mix-blend-mode: screen` so it only adds light, never muddies text), and floating orb/icon accents per-section (`.parallax-item`, depth set via `data-depth`) that drift at different speeds — genuine layered parallax, not just one isolated widget.
-- **Cursor-tilt cards** — service cards, review cards, and the About section's sign photo (`.card-3d`, `.tilt-card`) already rotate in 3D toward the pointer via `perspective` + `rotateX/rotateY`.
-- **Scroll-linked 3D hero** — the hero video and headline scale/fade/tilt as you scroll past them, tied to scroll progress via Motion's `scroll()`.
-- Everything here respects `prefers-reduced-motion`: the cursor-glow and parallax layer are removed entirely, and the 3D pole's idle spin/lerp collapses to an instant snap instead of an animated tilt.
+- **Site-wide cursor-reactive depth** — one `pointermove` listener in `script.js` drives things everywhere on the page: a soft gold spotlight that follows the cursor (`.cursor-glow`, `mix-blend-mode: screen` so it only adds light, never muddies text), and floating orb/icon accents per-section (`.parallax-item`, depth set via `data-depth`) that drift at different speeds — layered parallax across About, Services, and Visit.
+- **Cursor-tilt cards** — service cards, review cards, and the About section's sign photo (`.card-3d`, `.tilt-card`) rotate toward the pointer via `perspective` + `rotateX/rotateY`.
+- **Magnetic buttons** — every `.btn` nudges slightly toward the cursor on hover and eases back on leave.
+- **Scroll-linked hero** — the hero video and headline scale/fade/tilt as you scroll past them, tied to scroll progress via Motion's `scroll()`.
+- Everything here respects `prefers-reduced-motion`: the cursor-glow and parallax layer are removed entirely, and reveal/tilt animations collapse to their final state instead of animating.
 
 ## SEO / AI-visibility setup
 

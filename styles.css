@@ -357,42 +357,6 @@ a { color: inherit; text-decoration: none; }
 .reveal { opacity: 0; }
 .reveal.is-visible { opacity: 1; }
 
-.text-gold { color: var(--color-accent-light); font-style: italic; }
-
-/* ---------- 3D Showcase (WebGL barber pole) ---------- */
-.showcase-3d__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-xl);
-  align-items: center;
-}
-.showcase-3d__copy .lead { margin-top: var(--space-sm); max-width: 42ch; }
-.showcase-3d__stage {
-  position: relative;
-  aspect-ratio: 1;
-  width: 100%;
-  max-width: 420px;
-  margin-inline: auto;
-  border-radius: var(--radius);
-  border: 1px solid var(--color-border);
-  background: radial-gradient(circle at 50% 45%, rgba(161, 98, 7, 0.2), rgba(12, 10, 9, 0) 70%), var(--color-bg-card);
-  touch-action: none;
-}
-.showcase-3d__stage canvas { width: 100%; height: 100%; display: block; }
-.showcase-3d__stage.is-unavailable { display: none; }
-.showcase-3d__hint {
-  position: absolute;
-  bottom: var(--space-sm);
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  opacity: 0.65;
-  pointer-events: none;
-}
-
 /* ---------- About ---------- */
 .about__grid {
   display: grid;
@@ -664,12 +628,10 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 1024px) {
   .cards-3d { grid-template-columns: repeat(2, 1fr); }
   .cards-3d--reviews { grid-template-columns: 1fr; }
-  .about__grid, .visit__grid, .showcase-3d__inner { grid-template-columns: 1fr; }
+  .about__grid, .visit__grid { grid-template-columns: 1fr; }
   .visit__map { order: -1; }
   .gallery__grid, .gallery__grid--work { grid-template-columns: repeat(2, 1fr); }
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
-  .showcase-3d__copy { text-align: center; }
-  .showcase-3d__copy .lead { margin-inline: auto; }
 }
 
 @media (max-width: 860px) {

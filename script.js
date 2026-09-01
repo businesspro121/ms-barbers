@@ -185,135 +185,19 @@ if (!prefersReducedMotion) {
     card.addEventListener("pointermove", onMove);
     card.addEventListener("pointerleave", onLeave);
   });
-}
 
-/* ---------------- 3D showcase: WebGL barber pole ----------------
-   A real Three.js scene (not a CSS trick) — a gold-and-black barber
-   pole that tilts toward the cursor (or a finger drag on touch) and
-   idles with a slow spin + scrolling stripe texture when left alone.
-   Loaded lazily so a CDN hiccup here can never break the rest of the
-   page, and paused while off-screen to save the user's battery. */
-async function initPoleScene() {
-  const canvas = document.getElementById("poleCanvas");
-  const stage = document.querySelector(".showcase-3d__stage");
-  if (!canvas || !stage) return;
-
-  let THREE;
-  try {
-    THREE = await import("https://esm.sh/three@0.160.0");
-  } catch {
-    stage.classList.add("is-unavailable");
-    return;
-  }
-
-  let renderer;
-  try {
-    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, preserveDrawingBuffer: true });
-  } catch {
-    stage.classList.add("is-unavailable");
-    return;
-  }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-  camera.position.set(0, 0, 6.5);
-
-  scene.add(new THREE.AmbientLight(0xfff4e0, 0.7));
-  const keyLight = new THREE.PointLight(0xffd27a, 1.6, 20);
-  keyLight.position.set(3, 3, 4);
-  scene.add(keyLight);
-  const rimLight = new THREE.PointLight(0x8ea2ff, 0.6, 20);
-  rimLight.position.set(-3, -2, -3);
-  scene.add(rimLight);
-
-  // Procedural gold/black diagonal-stripe texture (the classic barber pole)
-  const stripeCanvas = document.createElement("canvas");
-  stripeCanvas.width = stripeCanvas.height = 256;
-  const sctx = stripeCanvas.getContext("2d");
-  sctx.fillStyle = "#0c0a09";
-  sctx.fillRect(0, 0, 256, 256);
-  sctx.save();
-  sctx.translate(128, 128);
-  sctx.rotate(Math.PI / 4);
-  sctx.translate(-256, -256);
-  const stripeWidth = 256 / 8;
-  for (let i = 0; i < 40; i++) {
-    sctx.fillStyle = i % 2 === 0 ? "#c8880f" : "#0c0a09";
-    sctx.fillRect(i * stripeWidth, -256, stripeWidth, 1024);
-  }
-  sctx.restore();
-  const stripeTexture = new THREE.CanvasTexture(stripeCanvas);
-  stripeTexture.wrapS = THREE.RepeatWrapping;
-  stripeTexture.wrapT = THREE.RepeatWrapping;
-  stripeTexture.repeat.set(3, 1);
-
-  const group = new THREE.Group();
-  group.rotation.z = 0.15;
-  scene.add(group);
-
-  const pole = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.55, 0.55, 3.2, 48, 1, true),
-    new THREE.MeshStandardMaterial({ map: stripeTexture, metalness: 0.5, roughness: 0.35 })
-  );
-  group.add(pole);
-
-  const capMaterial = new THREE.MeshStandardMaterial({ color: 0xc8880f, metalness: 0.9, roughness: 0.2 });
-  const topCap = new THREE.Mesh(new THREE.SphereGeometry(0.62, 24, 24, 0, Math.PI * 2, 0, Math.PI / 2), capMaterial);
-  topCap.position.y = 1.6;
-  group.add(topCap);
-  const bottomCap = new THREE.Mesh(new THREE.SphereGeometry(0.62, 24, 24, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), capMaterial);
-  bottomCap.position.y = -1.6;
-  group.add(bottomCap);
-
-  const ringTop = new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.05, 12, 32), capMaterial);
-  ringTop.position.y = 1.35;
-  ringTop.rotation.x = Math.PI / 2;
-  group.add(ringTop);
-  const ringBottom = ringTop.clone();
-  ringBottom.position.y = -1.35;
-  group.add(ringBottom);
-
-  function resize() {
-    const rect = stage.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) return;
-    renderer.setSize(rect.width, rect.height, false);
-    camera.aspect = rect.width / rect.height;
-    camera.updateProjectionMatrix();
-  }
-  new ResizeObserver(resize).observe(stage);
-  resize();
-
-  let targetX = 0;
-  let targetY = 0;
-  stage.addEventListener("pointermove", (e) => {
-    const rect = stage.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;
-    const py = (e.clientY - rect.top) / rect.height;
-    targetY = (px - 0.5) * 0.9;
-    targetX = (py - 0.5) * -0.6;
+  /* ---------------- Magnetic buttons ---------------- */
+  document.querySelectorAll(".btn").forEach((btn) => {
+    const onMove = (e) => {
+      const rect = btn.getBoundingClientRect();
+      const px = e.clientX - (rect.left + rect.width / 2);
+      const py = e.clientY - (rect.top + rect.height / 2);
+      animate(btn, { x: px * 0.25, y: py * 0.35 }, { duration: 0.3, easing: [0.16, 1, 0.3, 1] });
+    };
+    const onLeave = () => {
+      animate(btn, { x: 0, y: 0 }, { duration: 0.5, easing: [0.16, 1, 0.3, 1] });
+    };
+    btn.addEventListener("pointermove", onMove);
+    btn.addEventListener("pointerleave", onLeave);
   });
-  stage.addEventListener("pointerleave", () => {
-    targetX = 0;
-    targetY = 0;
-  });
-
-  let isVisible = true;
-  new IntersectionObserver(([entry]) => { isVisible = entry.isIntersecting; }, { threshold: 0.05 }).observe(stage);
-
-  function animateScene() {
-    requestAnimationFrame(animateScene);
-    if (!isVisible) return;
-    const lerpSpeed = prefersReducedMotion ? 1 : 0.06;
-    group.rotation.x += (targetX - group.rotation.x) * lerpSpeed;
-    group.rotation.y += (targetY - group.rotation.y) * lerpSpeed;
-    if (!prefersReducedMotion) {
-      group.rotation.y += 0.0025;
-      stripeTexture.offset.x -= 0.0015;
-    }
-    renderer.render(scene, camera);
-  }
-  animateScene();
 }
-
-initPoleScene();
